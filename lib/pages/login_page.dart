@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_service.dart';
-import '../pages/dashboard_page.dart';
+import 'dashboard_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,42 +12,31 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final identityController = TextEditingController();
   final passwordController = TextEditingController();
-  String message = "";
   bool isLoading = false;
+  String message = "";
 
   void doLogin() async {
     setState(() {
-      message = "";
       isLoading = true;
+      message = "";
     });
 
     final authService = AuthService();
     final result = await authService.login(
-      identityController.text,
-      passwordController.text,
+      identityController.text.trim(),
+      passwordController.text.trim(),
     );
 
-    setState(() {
-      isLoading = false;
-    });
+    setState(() => isLoading = false);
 
-    if (result['status'] == 200 || result['success'] == true) {
-      // ✅ Ambil token dari SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('api_token') ?? '';
-
-      // Login berhasil → ke dashboard dengan token
+    if (result['success'] == true) {
+      // ke dashboard
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => DashboardPage(token: token),
-        ),
+        MaterialPageRoute(builder: (context) => const DashboardPage()),
       );
     } else {
-      // ❌ Tampilkan pesan error dari API kalau ada
-      setState(() {
-        message = result['message'] ?? "Login gagal! Cek username & password.";
-      });
+      setState(() => message = result['message']);
     }
   }
 

@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import '../services/barang_service.dart';
 import '../models/barang.dart';
+import '../services/auth_service.dart';
+import 'login_page.dart';
 
 class BarangPage extends StatefulWidget {
-  final String token;
-  const BarangPage({super.key, required this.token});
+  const BarangPage({super.key});
 
   @override
   State<BarangPage> createState() => _BarangPageState();
 }
 
 class _BarangPageState extends State<BarangPage> {
-  late BarangService _barangService;
+  final BarangService _barangService = BarangService();
   List<Barang> _barangList = [];
   bool _loading = true;
 
   @override
   void initState() {
     super.initState();
-    _barangService = BarangService(widget.token);
     _loadData();
   }
 
@@ -37,10 +37,28 @@ class _BarangPageState extends State<BarangPage> {
     }
   }
 
+  Future<void> _logout() async {
+    await AuthService.logout();
+    if (!mounted) return;
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Data Barang")),
+      appBar: AppBar(
+        title: const Text("Data Barang"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _logout,
+          ),
+        ],
+      ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
@@ -51,7 +69,9 @@ class _BarangPageState extends State<BarangPage> {
                   final barang = _barangList[index];
                   return ListTile(
                     title: Text(barang.nama),
-                    subtitle: Text("Kode: ${barang.kode} | Stok: ${barang.stok}"),
+                    subtitle: Text(
+                      "Kode: ${barang.kode} | Stok: ${barang.stok}",
+                    ),
                   );
                 },
               ),

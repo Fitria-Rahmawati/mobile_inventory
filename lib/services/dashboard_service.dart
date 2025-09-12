@@ -1,16 +1,15 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/barang.dart';
 import 'auth_service.dart';
 
-class BarangService {
+class DashboardService {
   static const String baseUrl = "http://192.168.2.212:8080/api";
 
-  Future<List<Barang>> getBarangList() async {
+  Future<Map<String, dynamic>> getDashboardData() async {
     final token = await AuthService.getToken();
 
     final response = await http.get(
-      Uri.parse("$baseUrl/barang"),
+      Uri.parse("$baseUrl/dashboard"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -18,13 +17,9 @@ class BarangService {
     );
 
     if (response.statusCode == 200) {
-      final body = jsonDecode(response.body);
-      final list = (body['data'] as List)
-          .map((e) => Barang.fromJson(e))
-          .toList();
-      return list;
+      return jsonDecode(response.body);
     } else {
-      throw Exception("Gagal load data: ${response.body}");
+      throw Exception("Gagal load dashboard: ${response.body}");
     }
   }
 }
