@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'rak_page.dart';
 import 'barang_page.dart';
 import 'login_page.dart'; // buat redirect ke login
 
@@ -26,7 +26,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> loadTokenAndFetch() async {
     final prefs = await SharedPreferences.getInstance();
-    token = prefs.getString('access_token'); // ambil token login
+    token = prefs.getString('token'); // ambil token login
     if (token != null) {
       fetchDashboard();
     } else {
@@ -110,13 +110,18 @@ class _DashboardPageState extends State<DashboardPage> {
                 // TODO: buat BarangKeluarPage
               },
             ),
+            
             ListTile(
               leading: const Icon(Icons.storage),
               title: const Text("Rak"),
               onTap: () {
-                // TODO: buat RakPage
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const RakPage()),
+                  );
               },
             ),
+           
             ListTile(
               leading: const Icon(Icons.receipt),
               title: const Text("Laporan Stok"),
