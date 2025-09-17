@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  static const String baseUrl = "http://192.168.2.212:8080/api"; // ganti sesuai backend
+  static const String baseUrl = "http://192.168.2.215:8080/api"; // ganti sesuai backend
 
   /// Login
   Future<Map<String, dynamic>> login(String identity, String password) async {

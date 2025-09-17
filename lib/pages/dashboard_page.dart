@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'rak_page.dart';
+import 'barang_masuk_page.dart';
+import 'barang_keluar_page.dart';
 import 'barang_page.dart';
+import 'laporan_stok_page.dart';
 import 'login_page.dart'; // buat redirect ke login
 
 class DashboardPage extends StatefulWidget {
@@ -38,7 +41,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Future<void> fetchDashboard() async {
-    final url = Uri.parse("http://192.168.2.212:8080/api/dashboard");
+    final url = Uri.parse("http://192.168.2.215:8080/api/dashboard");
 
     final response = await http.get(
       url,
@@ -100,14 +103,20 @@ class _DashboardPageState extends State<DashboardPage> {
               leading: const Icon(Icons.download),
               title: const Text("Barang Masuk"),
               onTap: () {
-                // TODO: buat BarangMasukPage
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const BarangMasukPage()),
+                );
               },
             ),
             ListTile(
               leading: const Icon(Icons.upload),
               title: const Text("Barang Keluar"),
               onTap: () {
-                // TODO: buat BarangKeluarPage
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const BarangKeluarPage()),                 
+                );
               },
             ),
             
@@ -126,7 +135,10 @@ class _DashboardPageState extends State<DashboardPage> {
               leading: const Icon(Icons.receipt),
               title: const Text("Laporan Stok"),
               onTap: () {
-                // TODO: buat LaporanStokPage
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => LaporanStokPage()),
+                );
               },
             ),
             const Divider(),

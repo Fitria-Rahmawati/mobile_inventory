@@ -4,7 +4,7 @@ import '../models/barang.dart';
 import 'auth_service.dart';
 
 class BarangService {
-  static const String baseUrl = "http://192.168.2.212:8080/api";
+  static const String baseUrl = "http://192.168.2.215:8080/api";
 
   Future<List<Barang>> getBarangList() async {
     final token = await AuthService.getToken();
